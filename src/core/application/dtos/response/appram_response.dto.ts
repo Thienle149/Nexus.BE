@@ -1,0 +1,15 @@
+import { ApparamEntity } from '../../../domain/entities/appram.entity';
+import { BaseResponseDTO } from './base_response.dto';
+
+export class ApparamResponseDTO extends BaseResponseDTO<ApparamEntity[]> {
+  constructor(
+    success: boolean,
+    statusCode: number,
+    message: string | undefined,
+    data: ApparamEntity[],
+    error?: Map<string, any>,
+    timestamp?: Date
+  ) {
+    super(success, statusCode, message, data, error, timestamp);
+  }
+}

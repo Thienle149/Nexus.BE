@@ -1,0 +1,56 @@
+# Node modules
+node_modules/
+
+# Output folders
+dist/
+build/
+out/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Optional npm cache directory
+.npm/
+
+# Coverage directory used by testing tools
+coverage/
+
+# Lint cache
+.eslintcache
+
+# Optional lockfiles (if you're using just one, keep that one)
+package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Ignore test output if any
+test-results/
+
+# Local serverless or Firebase emulators
+.firebase/
+.functions/
+
+# Optional: Mac + Linux swap files
+*.swp
+*.swo

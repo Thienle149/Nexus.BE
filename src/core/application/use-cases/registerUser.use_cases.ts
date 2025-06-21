@@ -16,58 +16,57 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
   ) {}
 
   async register(req: RegisterUserRequestDTO) {
-    let dto: RegisterUserResponseDTO;
-    let accountRegisterType = await this.userRepository.existAccount(
-      req.email,
-      req.phoneNumber
-    );
-
-    switch (accountRegisterType) {
-      case AccountRegisterType.ACCOUNT_AVAIBLE:
-        try {
-          let isInsert = await this.userRepository.insert(req);
-          if (isInsert) {
-            let userEntity = new RegisterUserEntity(req);
-            userEntity.needToConfirmOTP = true;
-            userEntity.requestId = "0";
-
-            dto = RegisterUserResponseDTO.init(
-              true,
-              HttpStatus.OK,
-              null,
-              userEntity
-            );
-          } else {
-            dto = RegisterUserResponseDTO.init(
-              false,
-              HttpStatus.InternalServerError,
-              new ErrorObject("Lỗi", SystemMessage.SYSTEM_ERROR)
-            );
-          }
-        } catch (error) {
-          dto = RegisterUserResponseDTO.init(
-            false,
-            HttpStatus.InternalServerError,
-            (error as Error).message
-          );
-        }
-        break;
-      case AccountRegisterType.EMAIL_ALREADY_REGISTERED:
-        dto = RegisterUserResponseDTO.init(
-          false,
-          HttpStatus.Conflict,
-          new ErrorObject("Lỗi", SystemMessage.EMAIL_ALREADY_REGISTERED)
-        );
-        break;
-      case AccountRegisterType.PHONE_ALREADY_REGISTERED:
-        dto = RegisterUserResponseDTO.init(
-          false,
-          HttpStatus.Conflict,
-          new ErrorObject("Lỗi", SystemMessage.PHONE_ALREADY_REGISTERED)
-        );
-        break;
+    //Check email
+    const existEmail = await this.userRepository.existEmail(req.email);
+    if (existEmail) {
+      return RegisterUserResponseDTO.init(
+        false,
+        HttpStatus.Conflict,
+        new ErrorObject("Lỗi", SystemMessage.EMAIL_ALREADY_REGISTERED)
+      );
     }
 
-    return dto;
+    //Check phone
+    const existPhone = await this.userRepository.existPhone(req.phoneNumber);
+    if (existPhone) {
+      return RegisterUserResponseDTO.init(
+        false,
+        HttpStatus.Conflict,
+        new ErrorObject("Lỗi", SystemMessage.PHONE_ALREADY_REGISTERED)
+      );
+    }
+
+    //Check username
+    const username = req.username ?? req.generateUsername();
+    const existUsername = await this.userRepository.existUserName(username);
+    if (existUsername) {
+      return RegisterUserResponseDTO.init(
+        false,
+        HttpStatus.Conflict,
+        new ErrorObject("Lỗi", SystemMessage.USERNAME_ALREADY_REGISTERED)
+      );
+    }
+    req.username = username;
+
+    //Insert
+    let isInsert = await this.userRepository.insert(req);
+    if (isInsert) {
+      let userEntity = new RegisterUserEntity(req);
+      userEntity.needToConfirmOTP = true;
+      userEntity.requestId = "0";
+
+      return RegisterUserResponseDTO.init(
+        true,
+        HttpStatus.OK,
+        null,
+        userEntity
+      );
+    } else {
+      return RegisterUserResponseDTO.init(
+        false,
+        HttpStatus.InternalServerError,
+        new ErrorObject("Lỗi", SystemMessage.SYSTEM_ERROR)
+      );
+    }
   }
 }

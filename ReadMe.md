@@ -36,3 +36,6 @@ yarn build
 
 # Để chạy chương trình
 yarn start
+
+# Lệnh tự động cập nhật không cần phải deloy lại
+npx nodemon

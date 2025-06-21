@@ -6,7 +6,7 @@ import { ErrorObject } from "../../../shared/errors/ErrorObject";
 import { SystemMessage } from "../../../shared/enum/system_message.enum";
 import { AccountRegisterType } from "../../../shared/enum/account_register_type.enum";
 import { RegisterUserEntity } from "../../domain/entities/register_user.entity";
-import { IRegisterUserUseCase } from "./registerUser.interface.use_cases";
+import { IRegisterUserUseCase } from "./register_user.interface.use_cases";
 import { HttpStatus } from "../../../shared/enum/http_status.enum";
 
 @injectable()
@@ -19,20 +19,18 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     //Check email
     const existEmail = await this.userRepository.existEmail(req.email);
     if (existEmail) {
-      return RegisterUserResponseDTO.init(
-        false,
+      return RegisterUserResponseDTO.failureData(
         HttpStatus.Conflict,
-        new ErrorObject("Lỗi", SystemMessage.EMAIL_ALREADY_REGISTERED)
+        SystemMessage.EMAIL_ALREADY_REGISTERED
       );
     }
 
     //Check phone
     const existPhone = await this.userRepository.existPhone(req.phoneNumber);
     if (existPhone) {
-      return RegisterUserResponseDTO.init(
-        false,
+      return RegisterUserResponseDTO.failureData(
         HttpStatus.Conflict,
-        new ErrorObject("Lỗi", SystemMessage.PHONE_ALREADY_REGISTERED)
+        SystemMessage.PHONE_ALREADY_REGISTERED
       );
     }
 
@@ -40,13 +38,15 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     const username = req.username ?? req.generateUsername();
     const existUsername = await this.userRepository.existUserName(username);
     if (existUsername) {
-      return RegisterUserResponseDTO.init(
-        false,
+      return RegisterUserResponseDTO.failureData(
         HttpStatus.Conflict,
-        new ErrorObject("Lỗi", SystemMessage.USERNAME_ALREADY_REGISTERED)
+        SystemMessage.USERNAME_ALREADY_REGISTERED
       );
     }
+
+    //Update value before insert database
     req.username = username;
+    req.password = req.password.encrypt().toString();
 
     //Insert
     let isInsert = await this.userRepository.insert(req);
@@ -54,18 +54,13 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
       let userEntity = new RegisterUserEntity(req);
       userEntity.needToConfirmOTP = true;
       userEntity.requestId = "0";
+      userEntity.username = req.username;
 
-      return RegisterUserResponseDTO.init(
-        true,
-        HttpStatus.OK,
-        null,
-        userEntity
-      );
+      return RegisterUserResponseDTO.successData(userEntity);
     } else {
-      return RegisterUserResponseDTO.init(
-        false,
+      return RegisterUserResponseDTO.failureData(
         HttpStatus.InternalServerError,
-        new ErrorObject("Lỗi", SystemMessage.SYSTEM_ERROR)
+        SystemMessage.SYSTEM_ERROR
       );
     }
   }

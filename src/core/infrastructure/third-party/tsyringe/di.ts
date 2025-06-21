@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { container } from "tsyringe";
 import { UserRepository } from "../../database/postgres/repositories/user.repository";
 import { AuthController } from "../../../../interface/http/express/controllers/auth.controllers";
-import { RegisterUserUseCase } from "../../../application/use-cases/registerUser.use_cases";
+import { RegisterUserUseCase } from "../../../application/use-cases/register_user.use_cases";
 
 //Repository
 container.register("IUserRepository", { useClass: UserRepository});

@@ -1,5 +1,7 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import { DataSource } from 'typeorm';
+import { User } from '../core/infrastructure/database/postgres/models/user.models';
 
 dotenv.config();
 
@@ -12,6 +14,18 @@ const config = {
 };
 
 let pool: Pool | null = null;
+
+export const AppDataSource = new DataSource({
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  synchronize: true, // Cẩn thận với production
+  logging: false,
+  entities: [User],
+});
 
 //Khởi tạo pool
 export const initPool = async () => {

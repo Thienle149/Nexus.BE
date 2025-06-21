@@ -1,22 +1,28 @@
 import dotenv from "dotenv";
 import app from "./app";
-import { initPool, close } from "./config/database";
+import { initPool, close, AppDataSource } from "./config/database";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
 //Start services
-initPool()
-  .then(() => {
+const startServer = async () => {
+  try {
+    await initPool();
+    await AppDataSource.initialize();
+    
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-  })
-  .catch((error) => {
-    console.error("Failed to instailized database pool", error);
+    
+  } catch (error) {
+    console.error("Failed to initialize database pool", error);
     process.exit(1);
-  });
+  }
+};
+
+startServer();
 
 //Close serives
 process.on("SIGINT", async () => {

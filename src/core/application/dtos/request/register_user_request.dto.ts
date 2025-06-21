@@ -1,6 +1,7 @@
 import { BaseRequestDTO } from "./base_request.dto";
 
 export class RegisterUserRequestDTO extends BaseRequestDTO {
+  username?: string;
   email: string;
   phoneNumber: string;
   password: string;
@@ -20,5 +21,9 @@ export class RegisterUserRequestDTO extends BaseRequestDTO {
     this.password = params.password;
     this.fullName = params.fullName ?? null;
     this.termsAccepted = params.termsAccepted;
+  }
+
+  generateUsername() {
+    return this.email.split("@")[0];
   }
 }

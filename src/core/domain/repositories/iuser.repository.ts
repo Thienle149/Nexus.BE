@@ -9,7 +9,9 @@ export interface IUserRepository {
     //register
     insert(request: RegisterUserRequestDTO): Promise<Boolean>;
     findUserByAccount(username: string): Promise<Boolean>;
-    existAccount(email: string, phoneNumber: string): Promise<AccountRegisterType>;
+    existEmail(email: string): Promise<boolean>;
+    existPhone(phoneNumber: string): Promise<boolean>;
+    existUserName(username: string): Promise<boolean>;
 
     //login
     findUserBy(username: String, password: String): Promise<User | null>;

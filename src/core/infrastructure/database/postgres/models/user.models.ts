@@ -5,48 +5,52 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { BaseModel } from "./base.models";
 
-@Entity("users")
-export class User {
+@Entity()
+export class User extends BaseModel {
   @PrimaryGeneratedColumn("uuid")
   userId!: string;
 
-  @Column({ type: "varchar", length: 50, unique: true })
+  @Column({ type: "text", unique: true })
   username!: string;
+
+  @Column({ type: "text" })
+  email!: string;
 
   @Column({ type: "text" })
   password!: string;
 
-  @Column({ type: "varchar", length: 150 })
+  @Column({ type: "text", nullable: true })
   fullName!: string;
 
-  @Column({ type: "varchar", length: 200, nullable: true })
+  @Column({ type: "text", nullable: true })
   address?: string;
 
-  @Column({ type: "varchar", length: 20, nullable: true })
+  @Column({ type: "text", nullable: true })
   phoneNumber?: string;
 
-  @Column({ type: "nvarchar", length: 300, nullable: true })
+  @Column({ type: "text", nullable: true })
   userUnsigned?: string;
 
-  @Column({ type: "varchar", length: 20, nullable: true })
+  @Column({ type: "text", nullable: true })
   idCard?: string;
 
-  @Column({ type: "varchar", length: 20, default: "active" })
+  @Column({ type: "text", default: "active" })
   status!: string;
 
-  @Column({ type: "uuid" })
+  @Column({ type: "uuid", nullable: true })
   roleId!: string;
 
-  @Column({ type: "varchar", length: 50, nullable: true })
+  @Column({ type: "text", nullable: true })
   createdUser?: string;
 
-  @Column({ type: "varchar", length: 50, nullable: true })
+  @Column({ type: "text", nullable: true })
   updatedUser?: string;
 
-  @CreateDateColumn({ type: "timestamp", name: "created_date" })
+  @CreateDateColumn({ type: "timestamp", name: "created_date", nullable: true })
   createdDate!: Date;
 
-  @UpdateDateColumn({ type: "timestamp", name: "updated_date" })
+  @UpdateDateColumn({ type: "timestamp", name: "updated_date", nullable: true })
   updatedDate!: Date;
 }

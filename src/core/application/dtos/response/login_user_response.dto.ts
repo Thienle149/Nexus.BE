@@ -1,4 +1,4 @@
-import { BaseResponseDTO } from './base_response.dto';
+import { BaseResponseDTO } from "./base_response.dto";
 
 export class UserInfo {
   user_id: string;
@@ -42,13 +42,19 @@ export class LoginUserData {
 }
 
 export class LoginUserResponseDTO extends BaseResponseDTO<LoginUserData> {
-  constructor(
+  static init(
     success: boolean,
     statusCode: number,
     message: string,
     data: LoginUserData,
-    errors: any,
+    errors: any
   ) {
-    super(success, statusCode, message, data, errors);
+    return new LoginUserResponseDTO({
+      success,
+      statusCode,
+      message,
+      data,
+      errors,
+    });
   }
 }

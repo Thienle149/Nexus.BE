@@ -1,13 +1,13 @@
 import { BaseResponseDTO } from "./base_response.dto";
 
 export class ConfirmOTPChangePasswordResponseDTO extends BaseResponseDTO<null> {
-  constructor(
+  static init(
     success: boolean,
     statusCode: number,
     message?: string,
     error?: Map<string, any>,
     timestamp?: Date
   ) {
-    super(success, statusCode, message, null, error, timestamp);
+    return new ConfirmOTPChangePasswordResponseDTO({success, statusCode, message, error, timestamp});
   }
 }

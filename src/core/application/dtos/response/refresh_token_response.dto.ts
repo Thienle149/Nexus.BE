@@ -2,7 +2,7 @@ import { RefreshTokenEntity } from "../../../domain/entities/refresh_token.entit
 import { BaseResponseDTO } from "./base_response.dto";
 
 export class RefreshTokenResponseDTO extends BaseResponseDTO<RefreshTokenEntity> {
-  constructor(
+  static init(
     success: boolean,
     statusCode: number,
     message: string,
@@ -10,6 +10,13 @@ export class RefreshTokenResponseDTO extends BaseResponseDTO<RefreshTokenEntity>
     error?: Map<string, any>,
     timestamp?: Date
   ) {
-    super(success, statusCode, message, data, error, timestamp);
+    return new RefreshTokenResponseDTO({
+      success,
+      statusCode,
+      message,
+      data,
+      error,
+      timestamp,
+    });
   }
 }

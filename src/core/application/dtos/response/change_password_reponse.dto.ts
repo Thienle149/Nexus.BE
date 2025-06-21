@@ -2,7 +2,7 @@ import { ChangePasswordEnity } from "../../../domain/entities/change_password.en
 import { BaseResponseDTO } from "./base_response.dto";
 
 export class ChangePasswordResponseDTO extends BaseResponseDTO<ChangePasswordEnity> {
-  constructor(
+  static init(
     success: boolean,
     statusCode: number,
     message?: string,
@@ -10,6 +10,13 @@ export class ChangePasswordResponseDTO extends BaseResponseDTO<ChangePasswordEni
     error?: Map<string, any>,
     timestamp?: Date
   ) {
-    super(success, statusCode, message, data, error, timestamp);
+    return new ChangePasswordResponseDTO({
+      success,
+      statusCode,
+      message,
+      data,
+      error,
+      timestamp,
+    });
   }
 }

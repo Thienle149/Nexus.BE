@@ -2,7 +2,7 @@ import { RegisterUserEntity } from "../../../domain/entities/register_user.entit
 import { BaseResponseDTO } from "./base_response.dto";
 
 export class ConfirmOTPRegisterResponseDTO extends BaseResponseDTO<RegisterUserEntity> {
-  constructor(
+  static init(
     success: boolean,
     statusCode: number,
     message?: string,
@@ -10,6 +10,13 @@ export class ConfirmOTPRegisterResponseDTO extends BaseResponseDTO<RegisterUserE
     error?: Map<string, any>,
     timestamp?: Date
   ) {
-    super(success, statusCode, message, data, error, timestamp);
+    return new ConfirmOTPRegisterResponseDTO({
+      success,
+      statusCode,
+      message,
+      data,
+      error,
+      timestamp,
+    });
   }
 }

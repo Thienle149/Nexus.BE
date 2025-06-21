@@ -17,6 +17,4 @@ const authRoutes = container.resolve(AuthRoutes);
 app.use("/api/checking", checkingRoutes);
 app.use("/api/auth", authRoutes.router);
 
-//test
-
 export default app;

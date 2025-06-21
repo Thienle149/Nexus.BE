@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 import app from "./app";
 import { initPool, close, AppDataSource } from "./config/database";
 
+//Extensions
+import "./shared/extension/string_extension";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
